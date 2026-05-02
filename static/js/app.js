@@ -85,7 +85,9 @@ createApp({
                 subUrl: false,
                 showMailboxesPlaintext: false,
                 db_pass: false,
-                master_rt: false
+                master_rt: false,
+                oep_base: true,
+                oep_key: false
             },
 
             toasts: [],

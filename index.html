@@ -649,6 +649,7 @@
                                     <option value="fvia">FviaInboxes (需填authorization)</option>
                                     <option value="inboxes">Inboxes.com</option>
                                     <option value="temporarymail">TemporaryMail.com</option>
+                                    <option value="outlookeamilplus">outlookeamilplus (Outlook 邮箱池)</option>
                                 </select>
 
                                 <label class="block text-slate-700 text-sm font-extrabold mb-1 mt-6">发信域名池 (mail_domains)</label>
@@ -1195,6 +1196,41 @@
                                                 {{ showPwd.mc ? '👁️' : '🙈' }}
                                             </button>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div v-if="config.email_api_mode === 'outlookeamilplus' && config.outlookeamilplus" class="animate-fade-in space-y-4">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-xs font-black text-blue-800 bg-blue-100 px-3 py-1.5 rounded-md border border-blue-200 shadow-sm uppercase tracking-wider">当前模式</span>
+                                        <span class="text-sm font-black text-slate-700">Outlook Email Plus (邮箱池)</span>
+                                    </div>
+                                    <div>
+                                        <label class="block text-slate-700 text-xs font-extrabold mb-1.5 uppercase tracking-wider">API Base (服务地址)</label>
+                                        <div class="relative">
+                                            <input v-if="!showPwd.oep_base" readonly :value="maskValue(config.outlookeamilplus.api_base)"
+                                                   class="w-full appearance-none bg-white border border-slate-200 text-slate-700 rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors shadow-sm font-mono text-sm">
+                                            <input v-else type="text" v-model="config.outlookeamilplus.api_base" autocomplete="off"
+                                                   class="w-full appearance-none bg-white border border-slate-200 text-slate-700 rounded-lg py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors shadow-sm font-mono text-sm">
+                                            <button @click="showPwd.oep_base = !showPwd.oep_base" class="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400 hover:text-blue-500">
+                                                {{ showPwd.oep_base ? '👁️' : '🙈' }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-slate-700 text-xs font-extrabold mb-1.5 uppercase tracking-wider">API Key (密钥)</label>
+                                        <div class="relative">
+                                            <input :type="showPwd.oep_key ? 'text' : 'password'" v-model="config.outlookeamilplus.api_key" class="w-full appearance-none bg-white border border-slate-200 text-slate-700 rounded-lg py-2.5 px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors shadow-sm font-mono text-sm">
+                                            <button @click="showPwd.oep_key = !showPwd.oep_key" class="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-slate-400 hover:text-blue-600 focus:outline-none transition-transform hover:scale-110">
+                                                {{ showPwd.oep_key ? '👁️' : '🙈' }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input type="checkbox" v-model="config.outlookeamilplus.exclude_registered" class="w-4 h-4 text-blue-600 bg-slate-100 border-slate-300 rounded focus:ring-blue-500">
+                                            <span class="text-sm font-bold text-slate-700">排除已注册邮箱 (exclude_registered)</span>
+                                        </label>
+                                        <p class="text-xs text-slate-500 mt-1">启用后将自动排除"已注册邮箱.txt"中的邮箱</p>
                                     </div>
                                 </div>
 
