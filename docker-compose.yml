@@ -6,7 +6,7 @@ services:
     image: wenfxl/wenfxl-codex-manager:local
     container_name: wenfxl_codex_manager
     ports:
-      - "8000:8000"
+      - "18000:8000"
     restart: always
     extra_hosts:
       - "host.docker.internal:host-gateway"
