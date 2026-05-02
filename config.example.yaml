@@ -5,7 +5,7 @@
 # https://github.com/s12ryt/mail-curl
 
 reg_mode: "protocol"
-# 可选值: "imap" / "freemail" / "cloudflare_temp_email" / "cloudmail" / "mail_curl" / "luckmail"
+# 可选值: "imap" / "freemail" / "cloudflare_temp_email" / "cloudmail" / "mail_curl" / "luckmail" / "outlookeamilplus"
 email_api_mode: "cloudflare_temp_email"
 
 # [基础配置: cloudflare_temp_email / imap / cloudmail 共享]
@@ -101,6 +101,17 @@ luckmail:
   variant_mode: ''
   reuse_purchased: true
   tag_id:
+
+# [本地 Outlook Email Plus 邮箱池配置]
+outlookeamilplus:
+  # 邮箱池 API 基础地址
+  api_base: "https://your-outlook-plus-domain.com"
+  # API 密钥
+  api_key: "sk-372230010"
+  # 是否启用排除已注册邮箱功能
+  exclude_registered: true
+  # 已注册邮箱文件路径（相对于项目根目录）
+  registered_file: "已注册邮箱.txt"
 # [temporam 邮箱配置]
 temporam:
   cookie: ''
@@ -282,7 +293,7 @@ database:
     db_name: "wenfxl_manager"
 
 # WEB端密码
-web_password: admin
+web_password: Soaadmin.123456
 #CF账号
 cf_api_email: 
 #CF KEY

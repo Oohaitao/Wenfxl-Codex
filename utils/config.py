@@ -157,6 +157,10 @@ LUCKMAIL_EMAIL_TYPE: str = ""
 LUCKMAIL_VARIANT_MODE: str = ""
 LUCKMAIL_REUSE_PURCHASED: bool = False
 LUCKMAIL_TAG_ID: Optional[int] = None
+
+OUTLOOK_EMAIL_PLUS_API_BASE: str = ""
+OUTLOOK_EMAIL_PLUS_API_KEY: str = ""
+OUTLOOK_EMAIL_PLUS_EXCLUDE_REGISTERED: bool = True
 DUCKMAIL_API_URL: str = "https://api.duckmail.com"
 DUCKMAIL_DOMAIN: str = ""
 DUCKMAIL_MODE: str = "custom_api"
@@ -249,6 +253,7 @@ def reload_all_configs(new_config_dict=None):
     global LOCAL_MS_SUFFIX_MODE, LOCAL_MS_SUFFIX_LEN_MIN, LOCAL_MS_SUFFIX_LEN_MAX
     global DB_TYPE, MYSQL_CFG
     global MAX_LOG_LINES
+    global OUTLOOK_EMAIL_PLUS_API_BASE, OUTLOOK_EMAIL_PLUS_API_KEY, OUTLOOK_EMAIL_PLUS_EXCLUDE_REGISTERED
 
     base_yaml_config = init_config()
 
@@ -471,6 +476,11 @@ def reload_all_configs(new_config_dict=None):
         LUCKMAIL_TAG_ID = int(_raw_tag_id) if _raw_tag_id else None
     except (ValueError, TypeError):
         LUCKMAIL_TAG_ID = None
+
+    _outlook_plus = _c.get("outlookeamilplus", {})
+    OUTLOOK_EMAIL_PLUS_API_BASE = str(_outlook_plus.get("api_base", "")).strip().rstrip("/")
+    OUTLOOK_EMAIL_PLUS_API_KEY = str(_outlook_plus.get("api_key", "")).strip()
+    OUTLOOK_EMAIL_PLUS_EXCLUDE_REGISTERED = bool(_outlook_plus.get("exclude_registered", True))
 
     SUB_DOMAIN_LEVEL = _c.get("sub_domain_level", 1)
     RANDOM_SUB_DOMAIN_LEVEL = _c.get("random_sub_domain_level", False)

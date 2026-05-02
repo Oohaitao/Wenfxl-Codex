@@ -441,6 +441,33 @@ def get_email_and_token(proxies: Any = None) -> tuple:
         global_postman_fleet.add_mailbox_listener(ms_service, mailbox_info)
         return email, json.dumps(mailbox_info, ensure_ascii=False)
 
+    if mode == "outlookeamilplus":
+        try:
+            from utils.email_providers.outlookeamilplus_service import OutlookEmailPlusService
+            
+            api_base = getattr(cfg, 'OUTLOOK_EMAIL_PLUS_API_BASE', '')
+            api_key = getattr(cfg, 'OUTLOOK_EMAIL_PLUS_API_KEY', '')
+            
+            if not api_base or not api_key:
+                print(f"[{cfg.ts()}] [ERROR] OutlookEmailPlus 配置不完整，请检查 api_base 和 api_key")
+                return None, None
+            
+            service = OutlookEmailPlusService(api_key=api_key, base_url=api_base, proxies=mail_proxies)
+            
+            email, token_data = service.get_email_and_token()
+            
+            if email and token_data:
+                set_last_email(email)
+                print(f"[{cfg.ts()}] [INFO] OutlookEmailPlus 成功领取邮箱: ({mask_email(email)})")
+                return email, token_data
+            else:
+                print(f"[{cfg.ts()}] [ERROR] OutlookEmailPlus 获取邮箱失败")
+                return None, None
+                
+        except Exception as e:
+            print(f"[{cfg.ts()}] [ERROR] OutlookEmailPlus 流程异常: {e}")
+            return None, None
+
     prefix, ai_enabled = _get_ai_data_package()
 
     if cfg.ENABLE_SUB_DOMAINS:
@@ -1289,6 +1316,28 @@ def get_oai_code(
                         return code
                 except Exception as e:
                     pass
+            elif mode == "outlookeamilplus":
+                try:
+                    from utils.email_providers.outlookeamilplus_service import OutlookEmailPlusService
+                    
+                    api_base = getattr(cfg, 'OUTLOOK_EMAIL_PLUS_API_BASE', '')
+                    api_key = getattr(cfg, 'OUTLOOK_EMAIL_PLUS_API_KEY', '')
+                    
+                    if not api_base or not api_key:
+                        print(f"\n[{cfg.ts()}] [ERROR] OutlookEmailPlus 配置不完整")
+                        return ""
+                    
+                    service = OutlookEmailPlusService(api_key=api_key, base_url=api_base, proxies=mail_proxies)
+                    
+                    max_wait = max_attempts * 3
+                    code = service.get_code(email, timeout_seconds=max_wait)
+                    
+                    if code:
+                        print(f"\n[{cfg.ts()}] [SUCCESS] OutlookEmailPlus ({mask_email(email)})邮箱提取验证码成功: {code}")
+                        return code
+                        
+                except Exception as e:
+                    print(f"\n[{cfg.ts()}] [ERROR] OutlookEmailPlus 提取验证码异常: {e}")
             else:
                 if jwt:
                     res = requests.get(
